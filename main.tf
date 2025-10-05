@@ -34,7 +34,8 @@ resource "aws_security_group" "jenkins_sg" {
       description = "allow all outbound"
       from_port = 0
       to_port = 65535
-      protocol = ["0.0.0.0/0"]
+      protocol = "tcp"
+      cidr_block=["0.0.0.0/0"]
 
     }
     ]
