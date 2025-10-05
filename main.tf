@@ -54,6 +54,7 @@ resource "aws_instance" "jenkins-server" {
     ami = var.ami_id
     key_name = var.key_name
     instance_type = var.instance_type
+    user_data = file("./jenkins-server.sh")
     vpc_security_group_ids = [aws_security_group.jenkins_sg.id]
     tags = {
       Name="var.tag_name"
