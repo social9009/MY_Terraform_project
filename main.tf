@@ -19,31 +19,29 @@ resource "aws_security_group" "jenkins_sg" {
     description = "security group for jenkins"
     vpc_id = aws_vpc.my_vpc.id
 
-    ingress = [
-        for port in [22, 8080] : {
-            from_port = port
-            to_port   = port
-            protocol = "tcp"
-            cidr_blocks =["0.0.0.0/0"]
-            
-            
-        }
-        ]
-
-    egress = [{
-      description = "allow all outbound"
-      from_port = 0
-      to_port = 65535
-      protocol = "tcp"
-      cidr_block=["0.0.0.0/0"]
-
+    # Ingress rules using dynamic block
+  dynamic "ingress" {
+    for_each = [22, 8080]
+    content {
+      from_port   = ingress.value
+      to_port     = ingress.value
+      protocol    = "tcp"
+      cidr_blocks = ["0.0.0.0/0"]
     }
-    ]
-    tags = {
-      Name=var.security_group
-    }
+  }
 
+  # Egress rule block
+  egress {
+    description = "allow all outbound"
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
 
+  tags = {
+    Name = var.security_group
+  }
 }
 
 
