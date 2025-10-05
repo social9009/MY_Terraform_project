@@ -1,0 +1,46 @@
+pipeline{
+    agent any
+     parameters {
+        choice(
+            name: 'ACTION',
+            choices: ['apply', 'destroy'],
+            description: 'Select Terraform action to perform'
+        )
+
+    stages{
+        stage('cloniong github repo'){
+            steps{
+                  echo "Cloning repository from GitHub..."
+                    checkout([
+                    $class: 'GitSCM',
+                    branches: [[name: '*/main']],   // Change branch name if needed
+                    doGenerateSubmoduleConfigurations: false,
+                    extensions: [],
+                    userRemoteConfigs: [[
+                        url: 'https://github.com/your-username/your-repo.git'  // Replace with your repo URL
+                    ]]
+                ])
+             }
+        }
+        stage('terraform init'){
+            steps{
+                sh ("terraform init -reconfigure")
+            }
+        }
+
+        stage('terraform plan'){
+            steps{
+                sh('terraform plan')
+            }
+        }
+        stage('Action'){
+            steps{
+                echo "terraform action is -----> ${action}"
+                sh ('terraform ${action} --auto-approve')
+            }
+        }
+    
+
+    }
+
+}
