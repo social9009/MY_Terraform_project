@@ -17,7 +17,7 @@ pipeline{
                     doGenerateSubmoduleConfigurations: false,
                     extensions: [],
                     userRemoteConfigs: [[
-                        url: 'https://github.com/your-username/your-repo.git'  // Replace with your repo URL
+                        url: 'https://github.com/social9009/MY_Terraform_project.git'  // Replace with your repo URL
                     ]]
                 ])
              }
